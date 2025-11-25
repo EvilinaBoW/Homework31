@@ -1,0 +1,265 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 95: Приведение списка object к int
+            {
+                List<object> mixedObjects = new List<object> { 1, 2, 3, 4, 5 };
+
+                // Использование Cast<int>
+                var integers = mixedObjects.Cast<int>();
+
+                Console.WriteLine("Задание 95 - Приведение списка object к int:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", mixedObjects)}]");
+                Console.WriteLine($"Приведенный к int: [{string.Join(", ", integers)}]");
+                Console.WriteLine($"Тип элементов: {integers.First().GetType().Name}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 96: Отбор элементов определенного типа из смешанного списка
+            {
+                List<object> mixedList = new List<object>
+            {
+                1,
+                "hello",
+                3.14,
+                "world",
+                42,
+                true,
+                DateTime.Now,
+                "another string",
+                100
+            };
+
+                // Отбор только строк
+                var strings = mixedList.OfType<string>();
+
+                // Отбор только целых чисел
+                var integers = mixedList.OfType<int>();
+
+                // Отбор только булевых значений
+                var booleans = mixedList.OfType<bool>();
+
+                Console.WriteLine("Задание 96 - Отбор элементов определенного типа:");
+                Console.WriteLine($"Смешанный список: [{string.Join(", ", mixedList)}]");
+                Console.WriteLine($"Только строки: [{string.Join(", ", strings)}]");
+                Console.WriteLine($"Только целые числа: [{string.Join(", ", integers)}]");
+                Console.WriteLine($"Только булевы значения: [{string.Join(", ", booleans)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 97: OfType для фильтрации элементов нужного типа
+            {
+                List<object> heterogeneousCollection = new List<object>
+            {
+                new Person { Name = "John", Age = 25 },
+                "Just a string",
+                42,
+                new Employee { Name = "Alice", Position = "Manager" },
+                3.14,
+                new Person { Name = "Bob", Age = 30 },
+                new Employee { Name = "Carol", Position = "Developer" },
+                true
+            };
+
+                // Фильтрация только объектов типа Person
+                var people = heterogeneousCollection.OfType<Person>();
+
+                // Фильтрация только объектов типа Employee
+                var employees = heterogeneousCollection.OfType<Employee>();
+
+                // Фильтрация только числовых типов
+                var numbers = heterogeneousCollection.OfType<int>()
+                                                   .Concat(heterogeneousCollection.OfType<double>());
+
+                Console.WriteLine("Задание 97 - OfType для фильтрации элементов нужного типа:");
+                Console.WriteLine("Неоднородная коллекция содержит различные типы объектов");
+
+                Console.WriteLine("Объекты типа Person:");
+                foreach (var person in people)
+                {
+                    Console.WriteLine($"  {person.Name}, {person.Age} лет");
+                }
+
+                Console.WriteLine("Объекты типа Employee:");
+                foreach (var employee in employees)
+                {
+                    Console.WriteLine($"  {employee.Name} - {employee.Position}");
+                }
+
+                Console.WriteLine($"Числовые значения: [{string.Join(", ", numbers)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 98: Безопасное преобразование списка значений
+            {
+                List<object> values = new List<object>
+            {
+                "123",
+                "456",
+                "invalid",
+                "789",
+                "999"
+            };
+
+                // Безопасное преобразование строк в int с обработкой ошибок
+                var safeIntegers = values.Select(v =>
+                {
+                    if (v is string str && int.TryParse(str, out int result))
+                        return (int?)result;
+                    return null;
+                }).Where(i => i.HasValue).Select(i => i.Value);
+
+                // Альтернативный способ с OfType
+                var safeIntegersAlt = values.OfType<string>()
+                                           .Select(str => int.TryParse(str, out int result) ? (int?)result : null)
+                                           .Where(i => i.HasValue)
+                                           .Select(i => i.Value);
+
+                Console.WriteLine("Задание 98 - Безопасное преобразование списка значений:");
+                Console.WriteLine($"Исходные значения: [{string.Join(", ", values)}]");
+                Console.WriteLine($"Безопасно преобразованные числа: [{string.Join(", ", safeIntegers)}]");
+                Console.WriteLine($"Альтернативный способ: [{string.Join(", ", safeIntegersAlt)}]");
+
+                // Пример с пользовательскими объектами
+                List<object> objects = new List<object>
+            {
+                new Product { Name = "Laptop", Price = 1000 },
+                "Not a product",
+                new Product { Name = "Mouse", Price = 25 },
+                42,
+                new Product { Name = "Keyboard", Price = 75 }
+            };
+
+                var safeProducts = objects.OfType<Product>();
+                Console.WriteLine("Безопасное извлечение продуктов:");
+                foreach (var product in safeProducts)
+                {
+                    Console.WriteLine($"  {product.Name} - ${product.Price}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Дополнительные примеры: Различия между Cast и OfType
+            {
+                List<object> mixedList = new List<object>
+            {
+                1,
+                "hello",
+                2,
+                "world",
+                3
+            };
+
+                Console.WriteLine("Дополнительные примеры - Различия между Cast и OfType:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", mixedList)}]");
+
+                // OfType - безопасно, пропускает элементы неподходящего типа
+                var ofTypeResult = mixedList.OfType<int>();
+                Console.WriteLine($"OfType<int(): [{string.Join(", ", ofTypeResult)}]");
+
+                // Cast - выбрасывает исключение при неподходящем типе
+                try
+                {
+                    var castResult = mixedList.Cast<int>();
+                    Console.WriteLine($"Cast<int(): [{string.Join(", ", castResult)}]");
+                }
+                catch (InvalidCastException)
+                {
+                    Console.WriteLine("Cast<int() вызвал исключение InvalidCastException");
+                }
+
+                // Безопасный Cast с предварительной фильтрацией
+                var safeCast = mixedList.OfType<int>().Cast<int>();
+                Console.WriteLine($"Безопасный Cast: [{string.Join(", ", safeCast)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Пример с наследованием
+            {
+                List<Animal> animals = new List<Animal>
+            {
+                new Dog { Name = "Rex", Breed = "Shepherd" },
+                new Cat { Name = "Whiskers", Color = "Black" },
+                new Dog { Name = "Buddy", Breed = "Labrador" },
+                new Cat { Name = "Mittens", Color = "White" }
+            };
+
+                // Приведение к базовому типу
+                var baseType = animals.Cast<Animal>();
+
+                // Фильтрация по производным типам
+                var dogs = animals.OfType<Dog>();
+                var cats = animals.OfType<Cat>();
+
+                Console.WriteLine("Пример с наследованием:");
+                Console.WriteLine("Все животные:");
+                foreach (var animal in baseType)
+                {
+                    Console.WriteLine($"  {animal.Name}");
+                }
+
+                Console.WriteLine("Только собаки:");
+                foreach (var dog in dogs)
+                {
+                    Console.WriteLine($"  {dog.Name} - {dog.Breed}");
+                }
+
+                Console.WriteLine("Только кошки:");
+                foreach (var cat in cats)
+                {
+                    Console.WriteLine($"  {cat.Name} - {cat.Color}");
+                }
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+
+    class Employee
+    {
+        public string Name { get; set; }
+        public string Position { get; set; }
+    }
+
+    class Product
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    // Классы для примера с наследованием
+    class Animal
+    {
+        public string Name { get; set; }
+    }
+
+    class Dog : Animal
+    {
+        public string Breed { get; set; }
+    }
+
+    class Cat : Animal
+    {
+        public string Color { get; set; }
+    }
+}
