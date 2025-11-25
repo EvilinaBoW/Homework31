@@ -1,0 +1,212 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 21: Сортировка чисел по возрастанию
+            {
+                int[] numbers = { 5, 2, 8, 1, 9 };
+                var sortedNumbers = numbers.OrderBy(n => n);
+                Console.WriteLine("Задание 21 - Числа по возрастанию:");
+                foreach (var num in sortedNumbers)
+                    Console.Write(num + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 22: Сортировка имен в обратном порядке
+            {
+                string[] names = { "Anna", "John", "Zoe", "Bob", "Michael" };
+                var sortedNames = names.OrderByDescending(n => n);
+                Console.WriteLine("Задание 22 - Имена в обратном порядке (Z-A):");
+                foreach (var name in sortedNames)
+                    Console.Write(name + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 23: Сортировка Person по возрасту и имени
+            {
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25 },
+                new Person { Name = "Alice", Age = 30 },
+                new Person { Name = "Bob", Age = 25 },
+                new Person { Name = "Carol", Age = 35 },
+                new Person { Name = "David", Age = 30 }
+            };
+
+                var sortedPeople = people.OrderBy(p => p.Age).ThenBy(p => p.Name);
+                Console.WriteLine("Задание 23 - Люди по возрасту и имени:");
+                foreach (var person in sortedPeople)
+                    Console.WriteLine($"{person.Name} - {person.Age} лет");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 24: Сортировка строк по длине
+            {
+                string[] words = { "Hi", "Hello", "World", "Programming", "C#" };
+                var sortedByLength = words.OrderBy(w => w.Length);
+                Console.WriteLine("Задание 24 - Строки по длине (от коротких к длинным):");
+                foreach (var word in sortedByLength)
+                    Console.Write(word + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 25: Сортировка товаров по цене (убывание)
+            {
+                var products = new List<Product>
+            {
+                new Product { Name = "Mouse", Price = 250 },
+                new Product { Name = "Keyboard", Price = 800 },
+                new Product { Name = "Headphones", Price = 150 },
+                new Product { Name = "Monitor", Price = 1200 }
+            };
+
+                var sortedProducts = products.OrderByDescending(p => p.Price);
+                Console.WriteLine("Задание 25 - Товары по цене (убывание):");
+                foreach (var product in sortedProducts)
+                    Console.WriteLine($"{product.Name} - {product.Price} руб.");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 26: Сортировка студентов по баллам и фамилии
+            {
+                var students = new List<Student>
+            {
+                new Student { Name = "Ivanov", GPA = 4.2 },
+                new Student { Name = "Petrov", GPA = 4.5 },
+                new Student { Name = "Sidorov", GPA = 4.2 },
+                new Student { Name = "Kuznetsov", GPA = 4.8 },
+                new Student { Name = "Smirnov", GPA = 4.5 }
+            };
+
+                var sortedStudents = students.OrderByDescending(s => s.GPA).ThenBy(s => s.Name);
+                Console.WriteLine("Задание 26 - Студенты по баллам (убывание) и фамилии:");
+                foreach (var student in sortedStudents)
+                    Console.WriteLine($"{student.Name} - {student.GPA}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 27: Сортировка чисел по количеству делителей
+            {
+                int[] numbers = { 12, 7, 15, 4, 10 };
+
+                // Функция для подсчета делителей
+                int CountDivisors(int n)
+                {
+                    int count = 0;
+                    for (int i = 1; i <= n; i++)
+                    {
+                        if (n % i == 0) count++;
+                    }
+                    return count;
+                }
+
+                var sortedByDivisors = numbers.OrderBy(n => CountDivisors(n));
+                Console.WriteLine("Задание 27 - Числа по количеству делителей:");
+                foreach (var num in sortedByDivisors)
+                    Console.Write($"{num} (делителей: {CountDivisors(num)}) ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 28: Сортировка сотрудников по отделу и зарплате
+            {
+                var employees = new List<Employee>
+            {
+                new Employee { Name = "Ivan", Department = "IT", Salary = 50000 },
+                new Employee { Name = "Maria", Department = "HR", Salary = 45000 },
+                new Employee { Name = "Alex", Department = "IT", Salary = 60000 },
+                new Employee { Name = "Olga", Department = "Finance", Salary = 55000 },
+                new Employee { Name = "Sergey", Department = "IT", Salary = 48000 }
+            };
+
+                var sortedEmployees = employees.OrderBy(e => e.Department).ThenByDescending(e => e.Salary);
+                Console.WriteLine("Задание 28 - Сотрудники по отделу и зарплате:");
+                foreach (var emp in sortedEmployees)
+                    Console.WriteLine($"{emp.Name} - {emp.Department} - {emp.Salary} руб.");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 29: Сортировка дат в хронологическом порядке
+            {
+                DateTime[] dates =
+                {
+                new DateTime(2023, 12, 25),
+                new DateTime(2023, 1, 1),
+                new DateTime(2023, 6, 15),
+                new DateTime(2022, 12, 31),
+                new DateTime(2023, 3, 8)
+            };
+
+                var sortedDates = dates.OrderBy(d => d);
+                Console.WriteLine("Задание 29 - Даты в хронологическом порядке:");
+                foreach (var date in sortedDates)
+                    Console.WriteLine(date.ToString("dd.MM.yyyy"));
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 30: Сортировка продуктов по категории и популярности
+            {
+                var products = new List<Product>
+            {
+                new Product { Name = "Gaming Mouse", Category = "Electronics", Popularity = 8 },
+                new Product { Name = "Office Chair", Category = "Furniture", Popularity = 9 },
+                new Product { Name = "Wireless Keyboard", Category = "Electronics", Popularity = 7 },
+                new Product { Name = "Desk", Category = "Furniture", Popularity = 6 },
+                new Product { Name = "USB Cable", Category = "Electronics", Popularity = 5 }
+            };
+
+                var sortedProducts = products.OrderBy(p => p.Category).ThenByDescending(p => p.Popularity);
+                Console.WriteLine("Задание 30 - Продукты по категории и популярности:");
+                foreach (var product in sortedProducts)
+                    Console.WriteLine($"{product.Name} - {product.Category} - Популярность: {product.Popularity}/10");
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы (добавлены недостающие свойства)
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+
+    class Student
+    {
+        public string Name { get; set; }
+        public double GPA { get; set; }
+        public string Faculty { get; set; }
+    }
+
+    class Product
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Category { get; set; }
+        public int Popularity { get; set; }
+    }
+
+    class Employee
+    {
+        public string Name { get; set; }
+        public decimal Salary { get; set; }
+        public int Experience { get; set; }
+        public string Department { get; set; }
+    }
+}
