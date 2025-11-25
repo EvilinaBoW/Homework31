@@ -1,0 +1,198 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 11: Квадраты чисел
+            {
+                int[] numbers = { 1, 2, 3, 4, 5 };
+                var squares = numbers.Select(n => n * n);
+                Console.WriteLine("Задание 11 - Квадраты чисел:");
+                foreach (var square in squares)
+                    Console.Write(square + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 12: Имена из списка Person
+            {
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25 },
+                new Person { Name = "Alice", Age = 35 },
+                new Person { Name = "Bob", Age = 30 }
+            };
+
+                var names = people.Select(p => p.Name);
+                Console.WriteLine("Задание 12 - Имена людей:");
+                foreach (var name in names)
+                    Console.Write(name + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 13: "Name - Age" формат
+            {
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25 },
+                new Person { Name = "Alice", Age = 35 },
+                new Person { Name = "Bob", Age = 30 }
+            };
+
+                var nameAgeList = people.Select(p => $"{p.Name} - {p.Age}");
+                Console.WriteLine("Задание 13 - Name - Age:");
+                foreach (var item in nameAgeList)
+                    Console.WriteLine(item);
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 14: Длины строк
+            {
+                string[] words = { "Hello", "World", "Programming", "C#" };
+                var lengths = words.Select(w => w.Length);
+                Console.WriteLine("Задание 14 - Длины строк:");
+                foreach (var length in lengths)
+                    Console.Write(length + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 15: Выбранные свойства
+            {
+                var products = new List<Product>
+            {
+                new Product { Name = "Mouse", Price = 250, Category = "Electronics" },
+                new Product { Name = "Keyboard", Price = 800, Category = "Electronics" },
+                new Product { Name = "Notebook", Price = 50, Category = "Stationery" }
+            };
+
+                var productInfo = products.Select(p => new { p.Name, p.Category });
+                Console.WriteLine("Задание 15 - Выбранные свойства (Name, Category):");
+                foreach (var info in productInfo)
+                    Console.WriteLine($"{info.Name} - {info.Category}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 16: Конвертация в доллары
+            {
+                decimal[] pricesInRubles = { 100, 250, 500, 1000, 75 };
+                var pricesInDollars = pricesInRubles.Select(price => price / 100);
+                Console.WriteLine("Задание 16 - Цены в долларах (1$ = 100 руб):");
+                foreach (var price in pricesInDollars)
+                    Console.Write($"{price:F2}$ ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 17: Анонимные типы
+            {
+                var students = new List<Student>
+            {
+                new Student { Name = "Ivan", GPA = 4.2, Faculty = "Computer Science" },
+                new Student { Name = "Maria", GPA = 4.5, Faculty = "Mathematics" },
+                new Student { Name = "Alex", GPA = 3.8, Faculty = "Physics" }
+            };
+
+                var studentProjection = students.Select(s => new
+                {
+                    StudentName = s.Name,
+                    AcademicPerformance = s.GPA > 4.0 ? "High" : "Average",
+                    Department = s.Faculty
+                });
+
+                Console.WriteLine("Задание 17 - Анонимные типы:");
+                foreach (var student in studentProjection)
+                    Console.WriteLine($"{student.StudentName} - {student.AcademicPerformance} - {student.Department}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 18: Строки с префиксом
+            {
+                string[] items = { "apple", "banana", "cherry", "date" };
+                var prefixedItems = items.Select(item => "fruit_" + item);
+                Console.WriteLine("Задание 18 - Строки с префиксом:");
+                foreach (var item in prefixedItems)
+                    Console.Write(item + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 19: Форматирование email-адресов
+            {
+                var emails = new List<string>
+            {
+                "john.doe@example.com",
+                "alice.smith@company.org",
+                "bob@test.ru"
+            };
+
+                var formattedEmails = emails.Select(email =>
+                {
+                    var parts = email.Split('@');
+                    return $"Username: {parts[0]}, Domain: {parts[1]}";
+                });
+
+                Console.WriteLine("Задание 19 - Форматированные email-адреса:");
+                foreach (var formattedEmail in formattedEmails)
+                    Console.WriteLine(formattedEmail);
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 20: Преобразование в кортежи
+            {
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25 },
+                new Person { Name = "Alice", Age = 35 },
+                new Person { Name = "Bob", Age = 30 }
+            };
+
+                var tuples = people.Select(p => (p.Name, p.Age));
+                Console.WriteLine("Задание 20 - Кортежи (Name, Age):");
+                foreach (var tuple in tuples)
+                    Console.WriteLine($"{tuple.Name} - {tuple.Age}");
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы (добавлены недостающие свойства)
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+
+    class Student
+    {
+        public string Name { get; set; }
+        public double GPA { get; set; }
+        public string Faculty { get; set; }
+    }
+
+    class Product
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Category { get; set; }
+    }
+
+    class Employee
+    {
+        public string Name { get; set; }
+        public decimal Salary { get; set; }
+        public int Experience { get; set; }
+    }
+}
