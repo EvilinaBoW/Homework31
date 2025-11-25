@@ -1,0 +1,175 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 61: Удаление дубликатов
+            {
+                int[] numbers = { 1, 2, 2, 3, 3, 3, 4 };
+                var distinctNumbers = numbers.Distinct();
+                Console.WriteLine("Задание 61 - Удаление дубликатов:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"Без дубликатов: [{string.Join(", ", distinctNumbers)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 62: Объединение двух списков
+            {
+                int[] list1 = { 1, 2, 3 };
+                int[] list2 = { 3, 4, 5 };
+                var union = list1.Union(list2);
+                Console.WriteLine("Задание 62 - Объединение двух списков:");
+                Console.WriteLine($"Список 1: [{string.Join(", ", list1)}]");
+                Console.WriteLine($"Список 2: [{string.Join(", ", list2)}]");
+                Console.WriteLine($"Объединение: [{string.Join(", ", union)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 63: Разница двух списков
+            {
+                int[] list1 = { 1, 2, 3, 4, 5 };
+                int[] list2 = { 3, 4, 5, 6, 7 };
+                var difference = list1.Except(list2);
+                Console.WriteLine("Задание 63 - Разница двух списков:");
+                Console.WriteLine($"Список 1: [{string.Join(", ", list1)}]");
+                Console.WriteLine($"Список 2: [{string.Join(", ", list2)}]");
+                Console.WriteLine($"Разница (элементы в первом, но не во втором): [{string.Join(", ", difference)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 64: Пересечение двух списков
+            {
+                int[] list1 = { 1, 2, 3, 4 };
+                int[] list2 = { 3, 4, 5, 6 };
+                var intersection = list1.Intersect(list2);
+                Console.WriteLine("Задание 64 - Пересечение двух списков:");
+                Console.WriteLine($"Список 1: [{string.Join(", ", list1)}]");
+                Console.WriteLine($"Список 2: [{string.Join(", ", list2)}]");
+                Console.WriteLine($"Пересечение: [{string.Join(", ", intersection)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 65: Удаление дубликатов строк с учетом регистра
+            {
+                string[] strings = { "Apple", "apple", "BANANA", "Banana", "CHERRY", "cherry" };
+                var distinctStrings = strings.Distinct();
+                Console.WriteLine("Задание 65 - Удаление дубликатов строк (с учетом регистра):");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", strings)}]");
+                Console.WriteLine($"Без дубликатов: [{string.Join(", ", distinctStrings)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 66: Distinct с пользовательским компаратором
+            {
+                string[] strings = { "Apple", "apple", "BANANA", "Banana", "CHERRY", "cherry" };
+                var distinctCaseInsensitive = strings.Distinct(StringComparer.OrdinalIgnoreCase);
+                Console.WriteLine("Задание 66 - Distinct с пользовательским компаратором:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", strings)}]");
+                Console.WriteLine($"Без дубликатов (без учета регистра): [{string.Join(", ", distinctCaseInsensitive)}]");
+
+                // Дополнительный пример с пользовательским компаратором для объектов
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25 },
+                new Person { Name = "John", Age = 30 },
+                new Person { Name = "Alice", Age = 25 },
+                new Person { Name = "Alice", Age = 25 }
+            };
+
+                var distinctPeople = people.Distinct(new PersonNameComparer());
+                Console.WriteLine($"Уникальные люди по имени: [{string.Join(", ", distinctPeople.Select(p => p.Name))}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 67: Элементы, которые есть в обоих списках
+            {
+                int[] list1 = { 1, 2, 3, 4, 5, 6 };
+                int[] list2 = { 4, 5, 6, 7, 8, 9 };
+                var commonElements = list1.Intersect(list2);
+                Console.WriteLine("Задание 67 - Элементы, которые есть в обоих списках:");
+                Console.WriteLine($"Список 1: [{string.Join(", ", list1)}]");
+                Console.WriteLine($"Список 2: [{string.Join(", ", list2)}]");
+                Console.WriteLine($"Общие элементы: [{string.Join(", ", commonElements)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 68: Симметрическая разность двух списков
+            {
+                int[] list1 = { 1, 2, 3, 4, 5 };
+                int[] list2 = { 4, 5, 6, 7, 8 };
+                var symmetricDifference = list1.Union(list2).Except(list1.Intersect(list2));
+                Console.WriteLine("Задание 68 - Симметрическая разность двух списков:");
+                Console.WriteLine($"Список 1: [{string.Join(", ", list1)}]");
+                Console.WriteLine($"Список 2: [{string.Join(", ", list2)}]");
+                Console.WriteLine($"Симметрическая разность: [{string.Join(", ", symmetricDifference)}]");
+
+                // Альтернативный способ
+                var symmetricDiffAlt = list1.Except(list2).Union(list2.Except(list1));
+                Console.WriteLine($"Симметрическая разность (альтернативный способ): [{string.Join(", ", symmetricDiffAlt)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Дополнительный пример: Множественные операции
+            {
+                int[] setA = { 1, 2, 3, 4, 5 };
+                int[] setB = { 3, 4, 5, 6, 7 };
+                int[] setC = { 5, 6, 7, 8, 9 };
+
+                var unionAll = setA.Union(setB).Union(setC);
+                var intersectionAll = setA.Intersect(setB).Intersect(setC);
+                var uniqueToA = setA.Except(setB.Union(setC));
+
+                Console.WriteLine("Дополнительный пример - Множественные операции:");
+                Console.WriteLine($"Множество A: [{string.Join(", ", setA)}]");
+                Console.WriteLine($"Множество B: [{string.Join(", ", setB)}]");
+                Console.WriteLine($"Множество C: [{string.Join(", ", setC)}]");
+                Console.WriteLine($"Объединение всех: [{string.Join(", ", unionAll)}]");
+                Console.WriteLine($"Пересечение всех: [{string.Join(", ", intersectionAll)}]");
+                Console.WriteLine($"Уникальные для A: [{string.Join(", ", uniqueToA)}]");
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name} ({Age})";
+        }
+    }
+
+    class PersonNameComparer : IEqualityComparer<Person>
+    {
+        public bool Equals(Person x, Person y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (x is null || y is null) return false;
+            return string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public int GetHashCode(Person obj)
+        {
+            return obj.Name?.ToLowerInvariant().GetHashCode() ?? 0;
+        }
+    }
+}
