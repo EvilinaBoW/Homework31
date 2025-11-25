@@ -1,0 +1,229 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 99: Сложный запрос - группировка -> фильтрация -> сортировка с вычисленными полями
+            {
+                var products = new List<Product>
+            {
+                new Product { ProductId = 1, Name = "Gaming Laptop", Category = "Electronics", Price = 1200, Stock = 5 },
+                new Product { ProductId = 2, Name = "Office Chair", Category = "Furniture", Price = 250, Stock = 15 },
+                new Product { ProductId = 3, Name = "Wireless Mouse", Category = "Electronics", Price = 45, Stock = 0 },
+                new Product { ProductId = 4, Name = "Desk", Category = "Furniture", Price = 400, Stock = 8 },
+                new Product { ProductId = 5, Name = "Monitor", Category = "Electronics", Price = 300, Stock = 12 },
+                new Product { ProductId = 6, Name = "Keyboard", Category = "Electronics", Price = 80, Stock = 0 },
+                new Product { ProductId = 7, Name = "Bookshelf", Category = "Furniture", Price = 150, Stock = 20 },
+                new Product { ProductId = 8, Name = "Tablet", Category = "Electronics", Price = 500, Stock = 3 }
+            };
+
+                var complexQuery = products
+                    // Группировка по категориям
+                    .GroupBy(p => p.Category)
+                    // Фильтрация групп - только категории с товарами в наличии
+                    .Where(g => g.Any(p => p.Stock > 0))
+                    // Вычисление агрегированных данных для каждой категории
+                    .Select(g => new
+                    {
+                        Category = g.Key,
+                        TotalProducts = g.Count(),
+                        AvailableProducts = g.Count(p => p.Stock > 0),
+                        TotalValue = g.Sum(p => p.Price * p.Stock),
+                        AveragePrice = g.Average(p => p.Price),
+                        // Вычисляемое поле - статус категории на основе средней цены
+                        PriceCategory = g.Average(p => p.Price) switch
+                        {
+                            < 100 => "Budget",
+                            >= 100 and < 500 => "Medium",
+                            >= 500 => "Premium",
+                            _ => "Unknown"
+                        },
+                        // Сортируем товары внутри категории по убыванию цены
+                        Products = g.OrderByDescending(p => p.Price)
+                                   .Select(p => new
+                                   {
+                                       p.Name,
+                                       p.Price,
+                                       p.Stock,
+                                       Status = p.Stock > 0 ? "In Stock" : "Out of Stock"
+                                   })
+                    })
+                    // Сортируем категории по убыванию общей стоимости
+                    .OrderByDescending(x => x.TotalValue)
+                    // Дополнительная сортировка по количеству доступных товаров
+                    .ThenByDescending(x => x.AvailableProducts);
+
+                Console.WriteLine("Задание 99 - Сложный запрос: группировка -> фильтрация -> сортировка с вычисленными полями");
+                Console.WriteLine("==========================================================================================");
+
+                foreach (var category in complexQuery)
+                {
+                    Console.WriteLine($"\nКатегория: {category.Category}");
+                    Console.WriteLine($"  Всего товаров: {category.TotalProducts}");
+                    Console.WriteLine($"  Доступно товаров: {category.AvailableProducts}");
+                    Console.WriteLine($"  Общая стоимость: ${category.TotalValue:F2}");
+                    Console.WriteLine($"  Средняя цена: ${category.AveragePrice:F2}");
+                    Console.WriteLine($"  Ценовая категория: {category.PriceCategory}");
+                    Console.WriteLine("  Товары (по убыванию цены):");
+
+                    foreach (var product in category.Products)
+                    {
+                        Console.WriteLine($"    - {product.Name}: ${product.Price} [{product.Status}]");
+                    }
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 100: Многоэтапный запрос - соединение -> группировка -> агрегация -> сортировка
+            {
+                var customers = new List<Customer>
+            {
+                new Customer { CustomerId = 1, Name = "John Smith", City = "New York", Country = "USA" },
+                new Customer { CustomerId = 2, Name = "Maria Garcia", City = "Madrid", Country = "Spain" },
+                new Customer { CustomerId = 3, Name = "Bob Johnson", City = "London", Country = "UK" },
+                new Customer { CustomerId = 4, Name = "Alice Brown", City = "Paris", Country = "France" },
+                new Customer { CustomerId = 5, Name = "Mike Wilson", City = "Berlin", Country = "Germany" }
+            };
+
+                var orders = new List<Order>
+            {
+                new Order { OrderId = 1, CustomerId = 1, OrderDate = new DateTime(2024, 1, 15), Amount = 1500 },
+                new Order { OrderId = 2, CustomerId = 1, OrderDate = new DateTime(2024, 2, 20), Amount = 800 },
+                new Order { OrderId = 3, CustomerId = 2, OrderDate = new DateTime(2024, 1, 10), Amount = 1200 },
+                new Order { OrderId = 4, CustomerId = 3, OrderDate = new DateTime(2024, 3, 5), Amount = 950 },
+                new Order { OrderId = 5, CustomerId = 2, OrderDate = new DateTime(2024, 2, 28), Amount = 1700 },
+                new Order { OrderId = 6, CustomerId = 4, OrderDate = new DateTime(2024, 1, 25), Amount = 600 },
+                new Order { OrderId = 7, CustomerId = 1, OrderDate = new DateTime(2024, 3, 10), Amount = 1100 },
+                new Order { OrderId = 8, CustomerId = 5, OrderDate = new DateTime(2024, 2, 15), Amount = 1350 },
+                new Order { OrderId = 9, CustomerId = 3, OrderDate = new DateTime(2024, 3, 20), Amount = 750 }
+            };
+
+                var orderDetails = new List<OrderDetail>
+            {
+                new OrderDetail { OrderDetailId = 1, OrderId = 1, ProductName = "Laptop", Quantity = 1, UnitPrice = 1200 },
+                new OrderDetail { OrderDetailId = 2, OrderId = 1, ProductName = "Mouse", Quantity = 2, UnitPrice = 150 },
+                new OrderDetail { OrderDetailId = 3, OrderId = 2, ProductName = "Monitor", Quantity = 1, UnitPrice = 800 },
+                new OrderDetail { OrderDetailId = 4, OrderId = 3, ProductName = "Tablet", Quantity = 2, UnitPrice = 600 },
+                new OrderDetail { OrderDetailId = 5, OrderId = 4, ProductName = "Keyboard", Quantity = 3, UnitPrice = 80 },
+                new OrderDetail { OrderDetailId = 6, OrderId = 4, ProductName = "Mouse", Quantity = 2, UnitPrice = 150 },
+                new OrderDetail { OrderDetailId = 7, OrderId = 5, ProductName = "Gaming PC", Quantity = 1, UnitPrice = 1700 },
+                new OrderDetail { OrderDetailId = 8, OrderId = 6, ProductName = "Headphones", Quantity = 1, UnitPrice = 600 },
+                new OrderDetail { OrderDetailId = 9, OrderId = 7, ProductName = "Monitor", Quantity = 1, UnitPrice = 1100 },
+                new OrderDetail { OrderDetailId = 10, OrderId = 8, ProductName = "Laptop", Quantity = 1, UnitPrice = 1350 },
+                new OrderDetail { OrderDetailId = 11, OrderId = 9, ProductName = "Tablet", Quantity = 1, UnitPrice = 750 }
+            };
+
+                var multiStageQuery =
+                    // Соединение заказов с клиентами
+                    from order in orders
+                    join customer in customers on order.CustomerId equals customer.CustomerId
+                    join detail in orderDetails on order.OrderId equals detail.OrderId
+                    // Группировка по стране и клиенту
+                    group new { order, customer, detail } by new { customer.Country, customer.Name } into countryGroup
+                    // Агрегация данных
+                    select new
+                    {
+                        Country = countryGroup.Key.Country,
+                        CustomerName = countryGroup.Key.Name,
+                        TotalOrders = countryGroup.Select(x => x.order.OrderId).Distinct().Count(),
+                        TotalAmount = countryGroup.Sum(x => x.detail.UnitPrice * x.detail.Quantity),
+                        AverageOrderValue = countryGroup.Select(x => x.order.Amount).Average(),
+                        // Вычисление бонусного уровня клиента
+                        CustomerLevel = countryGroup.Sum(x => x.detail.UnitPrice * x.detail.Quantity) switch
+                        {
+                            > 3000 => "Platinum",
+                            > 1500 => "Gold",
+                            > 500 => "Silver",
+                            _ => "Bronze"
+                        },
+                        // Детали заказов
+                        OrderDetails = countryGroup
+                            .GroupBy(x => x.order.OrderId)
+                            .Select(orderGroup => new
+                            {
+                                OrderId = orderGroup.Key,
+                                OrderDate = orderGroup.First().order.OrderDate.ToString("dd.MM.yyyy"),
+                                Products = orderGroup.Select(od => $"{od.detail.ProductName} (x{od.detail.Quantity})"),
+                                OrderTotal = orderGroup.Sum(od => od.detail.UnitPrice * od.detail.Quantity)
+                            })
+                            .OrderByDescending(o => o.OrderTotal)
+                    }
+                    // Сортировка результатов
+                    into result
+                    orderby result.Country, result.TotalAmount descending
+                    select result;
+
+                Console.WriteLine("Задание 100 - Многоэтапный запрос: соединение -> группировка -> агрегация -> сортировка");
+                Console.WriteLine("=========================================================================================");
+
+                string currentCountry = "";
+                foreach (var customerData in multiStageQuery)
+                {
+                    if (currentCountry != customerData.Country)
+                    {
+                        currentCountry = customerData.Country;
+                        Console.WriteLine($"\n=== СТРАНА: {currentCountry} ===");
+                    }
+
+                    Console.WriteLine($"\nКлиент: {customerData.CustomerName}");
+                    Console.WriteLine($"  Уровень: {customerData.CustomerLevel}");
+                    Console.WriteLine($"  Всего заказов: {customerData.TotalOrders}");
+                    Console.WriteLine($"  Общая сумма: ${customerData.TotalAmount:F2}");
+                    Console.WriteLine($"  Средний чек: ${customerData.AverageOrderValue:F2}");
+                    Console.WriteLine("  Детали заказов:");
+
+                    foreach (var order in customerData.OrderDetails)
+                    {
+                        Console.WriteLine($"    Заказ #{order.OrderId} от {order.OrderDate}");
+                        Console.WriteLine($"      Товары: {string.Join(", ", order.Products)}");
+                        Console.WriteLine($"      Итого: ${order.OrderTotal:F2}");
+                    }
+                }
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы
+    class Product
+    {
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public decimal Price { get; set; }
+        public int Stock { get; set; }
+    }
+
+    class Customer
+    {
+        public int CustomerId { get; set; }
+        public string Name { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
+    }
+
+    class Order
+    {
+        public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime OrderDate { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    class OrderDetail
+    {
+        public int OrderDetailId { get; set; }
+        public int OrderId { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+    }
+}
