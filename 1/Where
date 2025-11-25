@@ -1,0 +1,181 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 1: Числа больше 50
+            {
+                int[] numbers = { 10, 25, 50, 75, 100, 150 };
+                var result = numbers.Where(n => n > 50);
+                Console.WriteLine("Задание 1 - Числа больше 50:");
+                foreach (var num in result)
+                    Console.Write(num + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 2: Четные числа
+            {
+                List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                var evenNumbers = numbers.Where(n => n % 2 == 0);
+                Console.WriteLine("Задание 2 - Четные числа:");
+                foreach (var num in evenNumbers)
+                    Console.Write(num + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 3: Строки на 'A'
+            {
+                string[] fruits = { "Apple", "Banana", "Apricot", "Orange", "Avocado" };
+                var aFruits = fruits.Where(f => f.StartsWith("A"));
+                Console.WriteLine("Задание 3 - Фрукты на 'A':");
+                foreach (var fruit in aFruits)
+                    Console.Write(fruit + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 4: Люди старше 30 лет
+            {
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25 },
+                new Person { Name = "Alice", Age = 35 },
+                new Person { Name = "Bob", Age = 30 },
+                new Person { Name = "Carol", Age = 40 }
+            };
+
+                var over30 = people.Where(p => p.Age > 30);
+                Console.WriteLine("Задание 4 - Люди старше 30:");
+                foreach (var person in over30)
+                    Console.WriteLine($"{person.Name} - {person.Age} лет");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 5: Числа, делящиеся на 3
+            {
+                int[] numbers = { 3, 5, 9, 12, 15, 17, 21, 25 };
+                var divisibleBy3 = numbers.Where(n => n % 3 == 0);
+                Console.WriteLine("Задание 5 - Числа, делящиеся на 3:");
+                foreach (var num in divisibleBy3)
+                    Console.Write(num + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 6: Студенты со средним баллом > 4.0
+            {
+                var students = new List<Student>
+            {
+                new Student { Name = "Ivan", GPA = 3.8 },
+                new Student { Name = "Maria", GPA = 4.2 },
+                new Student { Name = "Alex", GPA = 4.5 },
+                new Student { Name = "Olga", GPA = 3.9 }
+            };
+
+                var highAchievers = students.Where(s => s.GPA > 4.0);
+                Console.WriteLine("Задание 6 - Студенты с GPA > 4.0:");
+                foreach (var student in highAchievers)
+                    Console.WriteLine($"{student.Name} - {student.GPA}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 7: Строки длиной > 5 символов
+            {
+                string[] words = { "Hi", "Hello", "World", "Programming" };
+                var longWords = words.Where(w => w.Length > 5);
+                Console.WriteLine("Задание 7 - Слова длиной > 5 символов:");
+                foreach (var word in longWords)
+                    Console.Write(word + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 8: Товары с ценой 100-500 рублей
+            {
+                var products = new List<Product>
+            {
+                new Product { Name = "Mouse", Price = 250 },
+                new Product { Name = "Keyboard", Price = 800 },
+                new Product { Name = "Headphones", Price = 150 },
+                new Product { Name = "Monitor", Price = 1200 },
+                new Product { Name = "USB Cable", Price = 300 }
+            };
+
+                var affordableProducts = products.Where(p => p.Price >= 100 && p.Price <= 500);
+                Console.WriteLine("Задание 8 - Товары 100-500 рублей:");
+                foreach (var product in affordableProducts)
+                    Console.WriteLine($"{product.Name} - {product.Price} руб.");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 9: Положительные числа
+            {
+                int[] mixedNumbers = { -5, 10, -3, 8, -1, 15, 0, -7 };
+                var positiveNumbers = mixedNumbers.Where(n => n > 0);
+                Console.WriteLine("Задание 9 - Положительные числа:");
+                foreach (var num in positiveNumbers)
+                    Console.Write(num + " ");
+                Console.WriteLine("\n");
+            }
+            #endregion
+
+            #region Задание 10: Сотрудники с зарплатой выше среднего и стажем > 2 лет
+            {
+                var employees = new List<Employee>
+            {
+                new Employee { Name = "Ivan", Salary = 50000, Experience = 3 },
+                new Employee { Name = "Maria", Salary = 70000, Experience = 1 },
+                new Employee { Name = "Alex", Salary = 80000, Experience = 5 },
+                new Employee { Name = "Olga", Salary = 60000, Experience = 4 }
+            };
+
+                decimal averageSalary = employees.Average(e => e.Salary);
+                var qualifiedEmployees = employees.Where(e => e.Salary > averageSalary && e.Experience > 2);
+
+                Console.WriteLine("Задание 10 - Квалифицированные сотрудники:");
+                Console.WriteLine($"Средняя зарплата: {averageSalary:F2}");
+                foreach (var emp in qualifiedEmployees)
+                    Console.WriteLine($"{emp.Name} - {emp.Salary} руб., стаж {emp.Experience} лет");
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+
+    class Student
+    {
+        public string Name { get; set; }
+        public double GPA { get; set; }
+    }
+
+    class Product
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    class Employee
+    {
+        public string Name { get; set; }
+        public decimal Salary { get; set; }
+        public int Experience { get; set; }
+    }
+}
