@@ -1,0 +1,455 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 41: Объединение студентов с оценками
+            {
+                var students = new List<Student>
+            {
+                new Student { StudentId = 1, Name = "Иван" },
+                new Student { StudentId = 2, Name = "Мария" },
+                new Student { StudentId = 3, Name = "Алексей" }
+            };
+
+                var grades = new List<Grade>
+            {
+                new Grade { StudentId = 1, Subject = "Математика", Score = 5 },
+                new Grade { StudentId = 1, Subject = "Физика", Score = 4 },
+                new Grade { StudentId = 2, Subject = "Математика", Score = 4 },
+                new Grade { StudentId = 3, Subject = "Химия", Score = 5 },
+                new Grade { StudentId = 3, Subject = "Физика", Score = 3 }
+            };
+
+                var studentGrades = students.Join(
+                    grades,
+                    student => student.StudentId,
+                    grade => grade.StudentId,
+                    (student, grade) => new { student.Name, grade.Subject, grade.Score }
+                );
+
+                Console.WriteLine("Задание 41 - Студенты и их оценки:");
+                foreach (var item in studentGrades)
+                {
+                    Console.WriteLine($"{item.Name}: {item.Subject} - {item.Score}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 42: Внутреннее соединение Employees и Departments
+            {
+                var employees = new List<Employee>
+            {
+                new Employee { EmployeeId = 1, Name = "Иван", DepartmentId = 1 },
+                new Employee { EmployeeId = 2, Name = "Мария", DepartmentId = 2 },
+                new Employee { EmployeeId = 3, Name = "Алексей", DepartmentId = 1 },
+                new Employee { EmployeeId = 4, Name = "Ольга", DepartmentId = 3 }
+            };
+
+                var departments = new List<Department>
+            {
+                new Department { DepartmentId = 1, Name = "IT" },
+                new Department { DepartmentId = 2, Name = "HR" },
+                new Department { DepartmentId = 3, Name = "Финансы" }
+            };
+
+                var employeeDepartments = employees.Join(
+                    departments,
+                    emp => emp.DepartmentId,
+                    dept => dept.DepartmentId,
+                    (emp, dept) => new { emp.Name, Department = dept.Name }
+                );
+
+                Console.WriteLine("Задание 42 - Сотрудники и отделы:");
+                foreach (var item in employeeDepartments)
+                {
+                    Console.WriteLine($"{item.Name} - {item.Department}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 43: Левое соединение клиентов и заказов
+            {
+                var customers = new List<Customer>
+            {
+                new Customer { CustomerId = 1, Name = "Иван" },
+                new Customer { CustomerId = 2, Name = "Мария" },
+                new Customer { CustomerId = 3, Name = "Алексей" },
+                new Customer { CustomerId = 4, Name = "Ольга" }
+            };
+
+                var orders = new List<Order>
+            {
+                new Order { OrderId = 1, CustomerId = 1, Amount = 1500 },
+                new Order { OrderId = 2, CustomerId = 1, Amount = 2000 },
+                new Order { OrderId = 3, CustomerId = 3, Amount = 1000 }
+            };
+
+                var customerOrders = from customer in customers
+                                     join order in orders on customer.CustomerId equals order.CustomerId into customerOrdersGroup
+                                     from order in customerOrdersGroup.DefaultIfEmpty()
+                                     select new
+                                     {
+                                         customer.Name,
+                                         OrderAmount = order?.Amount ?? 0,
+                                         HasOrders = order != null
+                                     };
+
+                Console.WriteLine("Задание 43 - Все клиенты и их заказы (Left Join):");
+                foreach (var item in customerOrders)
+                {
+                    Console.WriteLine($"{item.Name}: {(item.HasOrders ? item.OrderAmount.ToString() : "нет заказов")}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 44: Объединение товаров с производителями
+            {
+                var products = new List<Product>
+            {
+                new Product { ProductId = 1, Name = "Мышь", ManufacturerId = 1 },
+                new Product { ProductId = 2, Name = "Клавиатура", ManufacturerId = 1 },
+                new Product { ProductId = 3, Name = "Монитор", ManufacturerId = 2 },
+                new Product { ProductId = 4, Name = "Наушники", ManufacturerId = 3 }
+            };
+
+                var manufacturers = new List<Manufacturer>
+            {
+                new Manufacturer { ManufacturerId = 1, Name = "Logitech" },
+                new Manufacturer { ManufacturerId = 2, Name = "Dell" },
+                new Manufacturer { ManufacturerId = 3, Name = "Sony" }
+            };
+
+                var productManufacturers = products.Join(
+                    manufacturers,
+                    product => product.ManufacturerId,
+                    manufacturer => manufacturer.ManufacturerId,
+                    (product, manufacturer) => new { product.Name, Manufacturer = manufacturer.Name }
+                );
+
+                Console.WriteLine("Задание 44 - Товары и производители:");
+                foreach (var item in productManufacturers)
+                {
+                    Console.WriteLine($"{item.Name} - {item.Manufacturer}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 45: Объединение с составным ключом
+            {
+                var sales = new List<Sale>
+            {
+                new Sale { Region = "Север", Year = 2023, Product = "Ноутбук", Amount = 500000 },
+                new Sale { Region = "Север", Year = 2023, Product = "Мышь", Amount = 50000 },
+                new Sale { Region = "Юг", Year = 2023, Product = "Ноутбук", Amount = 300000 },
+                new Sale { Region = "Север", Year = 2024, Product = "Ноутбук", Amount = 600000 }
+            };
+
+                var targets = new List<SalesTarget>
+            {
+                new SalesTarget { Region = "Север", Year = 2023, Target = 400000 },
+                new SalesTarget { Region = "Юг", Year = 2023, Target = 350000 },
+                new SalesTarget { Region = "Север", Year = 2024, Target = 550000 }
+            };
+
+                var salesWithTargets = sales.Join(
+                    targets,
+                    sale => new { sale.Region, sale.Year },
+                    target => new { target.Region, target.Year },
+                    (sale, target) => new
+                    {
+                        sale.Region,
+                        sale.Year,
+                        sale.Product,
+                        sale.Amount,
+                        target.Target,
+                        Achievement = (double)sale.Amount / (double)target.Target * 100
+                    }
+                );
+
+                Console.WriteLine("Задание 45 - Продажи и цели по регионам и годам:");
+                foreach (var item in salesWithTargets)
+                {
+                    Console.WriteLine($"{item.Region} {item.Year} {item.Product}: {item.Amount} / {item.Target} ({item.Achievement:F1}%)");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 46: Соединение трех таблиц
+            {
+                var customers = new List<Customer>
+            {
+                new Customer { CustomerId = 1, Name = "Иван" },
+                new Customer { CustomerId = 2, Name = "Мария" }
+            };
+
+                var orders = new List<Order>
+            {
+                new Order { OrderId = 1, CustomerId = 1, ProductId = 1 },
+                new Order { OrderId = 2, CustomerId = 1, ProductId = 2 },
+                new Order { OrderId = 3, CustomerId = 2, ProductId = 1 }
+            };
+
+                var products = new List<Product>
+            {
+                new Product { ProductId = 1, Name = "Ноутбук", Price = 50000 },
+                new Product { ProductId = 2, Name = "Мышь", Price = 2500 }
+            };
+
+                var customerOrderProducts = from order in orders
+                                            join customer in customers on order.CustomerId equals customer.CustomerId
+                                            join product in products on order.ProductId equals product.ProductId
+                                            select new
+                                            {
+                                                CustomerName = customer.Name,
+                                                ProductName = product.Name,
+                                                product.Price
+                                            };
+
+                Console.WriteLine("Задание 46 - Клиенты, заказы и товары:");
+                foreach (var item in customerOrderProducts)
+                {
+                    Console.WriteLine($"{item.CustomerName} - {item.ProductName} - {item.Price} руб.");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 47: Группированное объединение (GroupJoin)
+            {
+                var departments = new List<Department>
+            {
+                new Department { DepartmentId = 1, Name = "IT" },
+                new Department { DepartmentId = 2, Name = "HR" },
+                new Department { DepartmentId = 3, Name = "Финансы" }
+            };
+
+                var employees = new List<Employee>
+            {
+                new Employee { EmployeeId = 1, Name = "Иван", DepartmentId = 1 },
+                new Employee { EmployeeId = 2, Name = "Мария", DepartmentId = 2 },
+                new Employee { EmployeeId = 3, Name = "Алексей", DepartmentId = 1 },
+                new Employee { EmployeeId = 4, Name = "Ольга", DepartmentId = 1 }
+            };
+
+                var departmentsWithEmployees = departments.GroupJoin(
+                    employees,
+                    dept => dept.DepartmentId,
+                    emp => emp.DepartmentId,
+                    (dept, emps) => new
+                    {
+                        Department = dept.Name,
+                        Employees = emps.Select(e => e.Name),
+                        EmployeeCount = emps.Count()
+                    }
+                );
+
+                Console.WriteLine("Задание 47 - Отделы с сотрудниками (GroupJoin):");
+                foreach (var dept in departmentsWithEmployees)
+                {
+                    Console.WriteLine($"{dept.Department}: {dept.EmployeeCount} сотрудников - {string.Join(", ", dept.Employees)}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 48: Кросс-соединение двух коллекций
+            {
+                var colors = new List<string> { "Красный", "Синий", "Зеленый" };
+                var sizes = new List<string> { "S", "M", "L", "XL" };
+
+                var colorSizeCombinations = from color in colors
+                                            from size in sizes
+                                            select new { Color = color, Size = size };
+
+                Console.WriteLine("Задание 48 - Кросс-соединение цветов и размеров:");
+                foreach (var combo in colorSizeCombinations)
+                {
+                    Console.WriteLine($"{combo.Color} - {combo.Size}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 49: Объединение с фильтрацией перед соединением
+            {
+                var employees = new List<Employee>
+            {
+                new Employee { EmployeeId = 1, Name = "Иван", DepartmentId = 1, Salary = 50000 },
+                new Employee { EmployeeId = 2, Name = "Мария", DepartmentId = 2, Salary = 45000 },
+                new Employee { EmployeeId = 3, Name = "Алексей", DepartmentId = 1, Salary = 60000 },
+                new Employee { EmployeeId = 4, Name = "Ольга", DepartmentId = 3, Salary = 55000 }
+            };
+
+                var departments = new List<Department>
+            {
+                new Department { DepartmentId = 1, Name = "IT" },
+                new Department { DepartmentId = 2, Name = "HR" },
+                new Department { DepartmentId = 3, Name = "Финансы" }
+            };
+
+                // Фильтрация перед соединением
+                var highPaidEmployees = employees.Where(e => e.Salary > 50000);
+                var itDepartments = departments.Where(d => d.Name == "IT");
+
+                var filteredJoin = highPaidEmployees.Join(
+                    itDepartments,
+                    emp => emp.DepartmentId,
+                    dept => dept.DepartmentId,
+                    (emp, dept) => new { emp.Name, emp.Salary, Department = dept.Name }
+                );
+
+                Console.WriteLine("Задание 49 - Объединение с фильтрацией (сотрудники с зарплатой > 50000 в IT отделе):");
+                foreach (var item in filteredJoin)
+                {
+                    Console.WriteLine($"{item.Name} - {item.Department} - {item.Salary} руб.");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 50: Объединение данных из разных структур
+            {
+                var internalProducts = new List<InternalProduct>
+            {
+                new InternalProduct { Code = "NB001", Description = "Ноутбук бизнес-класса", Cost = 40000 },
+                new InternalProduct { Code = "NB002", Description = "Ноутбук игровой", Cost = 70000 },
+                new InternalProduct { Code = "PC001", Description = "Стационарный компьютер", Cost = 50000 }
+            };
+
+                var externalProducts = new List<ExternalProduct>
+            {
+                new ExternalProduct { SKU = "NB001", Name = "Business Laptop", Supplier = "Dell" },
+                new ExternalProduct { SKU = "NB002", Name = "Gaming Laptop", Supplier = "ASUS" },
+                new ExternalProduct { SKU = "PC001", Name = "Desktop PC", Supplier = "HP" }
+            };
+
+                var combinedProducts = internalProducts.Join(
+                    externalProducts,
+                    internalProd => internalProd.Code,
+                    externalProd => externalProd.SKU,
+                    (internalProd, externalProd) => new
+                    {
+                        Code = internalProd.Code,
+                        InternalName = internalProd.Description,
+                        ExternalName = externalProd.Name,
+                        Supplier = externalProd.Supplier,
+                        Cost = internalProd.Cost
+                    }
+                );
+
+                Console.WriteLine("Задание 50 - Объединение данных из разных структур:");
+                foreach (var product in combinedProducts)
+                {
+                    Console.WriteLine($"{product.Code}: {product.InternalName} / {product.ExternalName} - {product.Supplier} - {product.Cost} руб.");
+                }
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы для заданий Join
+    class Student
+    {
+        public int StudentId { get; set; }
+        public string Name { get; set; }
+        public double GPA { get; set; }
+        public string Faculty { get; set; }
+    }
+
+    class Grade
+    {
+        public int StudentId { get; set; }
+        public string Subject { get; set; }
+        public int Score { get; set; }
+    }
+
+    class Employee
+    {
+        public int EmployeeId { get; set; }
+        public string Name { get; set; }
+        public decimal Salary { get; set; }
+        public int Experience { get; set; }
+        public string Department { get; set; }
+        public int DepartmentId { get; set; }
+    }
+
+    class Department
+    {
+        public int DepartmentId { get; set; }
+        public string Name { get; set; }
+    }
+
+    class Customer
+    {
+        public int CustomerId { get; set; }
+        public string Name { get; set; }
+    }
+
+    class Order
+    {
+        public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public int ProductId { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    class Product
+    {
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Category { get; set; }
+        public int Popularity { get; set; }
+        public string Subcategory { get; set; }
+        public int ManufacturerId { get; set; }
+    }
+
+    class Manufacturer
+    {
+        public int ManufacturerId { get; set; }
+        public string Name { get; set; }
+    }
+
+    class SalesTarget
+    {
+        public string Region { get; set; }
+        public int Year { get; set; }
+        public decimal Target { get; set; }
+    }
+
+    class Sale
+    {
+        public string Region { get; set; }
+        public int Year { get; set; }
+        public string Product { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+    }
+
+    class InternalProduct
+    {
+        public string Code { get; set; }
+        public string Description { get; set; }
+        public decimal Cost { get; set; }
+    }
+
+    class ExternalProduct
+    {
+        public string SKU { get; set; }
+        public string Name { get; set; }
+        public string Supplier { get; set; }
+    }
+}
