@@ -1,0 +1,162 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 69: Первые 3 элемента
+            {
+                int[] numbers = { 1, 2, 3, 4, 5 };
+                var firstThree = numbers.Take(3);
+                Console.WriteLine("Задание 69 - Первые 3 элемента:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"Первые 3 элемента: [{string.Join(", ", firstThree)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 70: Пропустить первые 2 элемента
+            {
+                int[] numbers = { 1, 2, 3, 4, 5 };
+                var skipFirstTwo = numbers.Skip(2);
+                Console.WriteLine("Задание 70 - Пропустить первые 2 элемента:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"После пропуска 2 элементов: [{string.Join(", ", skipFirstTwo)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 71: Первый элемент по условию
+            {
+                int[] numbers = { 10, 25, 30, 45, 50, 65 };
+                var firstGreaterThan40 = numbers.First(n => n > 40);
+                Console.WriteLine("Задание 71 - Первый элемент, удовлетворяющий условию:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"Первый элемент больше 40: {firstGreaterThan40}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 72: Последний элемент списка
+            {
+                int[] numbers = { 1, 2, 3, 4, 5 };
+                var lastElement = numbers.Last();
+                Console.WriteLine("Задание 72 - Последний элемент списка:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"Последний элемент: {lastElement}");
+                Console.WriteLine();
+
+                // Альтернативный способ для пустого списка
+                int[] emptyArray = { };
+                var lastOrDefault = emptyArray.LastOrDefault();
+                Console.WriteLine($"Последний элемент пустого списка (LastOrDefault): {lastOrDefault}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 73: Пагинация - пропустить N, взять M
+            {
+                int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                int pageSize = 3;
+                int pageNumber = 2; // Вторая страница (индекс начинается с 0 для пропуска)
+
+                var page = numbers.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                Console.WriteLine("Задание 73 - Пагинация:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"Страница {pageNumber}, размер страницы {pageSize}: [{string.Join(", ", page)}]");
+
+                // Демонстрация нескольких страниц
+                Console.WriteLine("Все страницы (размер 3):");
+                for (int i = 1; i <= 4; i++)
+                {
+                    var currentPage = numbers.Skip((i - 1) * pageSize).Take(pageSize);
+                    if (currentPage.Any())
+                    {
+                        Console.WriteLine($"Страница {i}: [{string.Join(", ", currentPage)}]");
+                    }
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 74: TakeWhile - брать элементы пока выполняется условие
+            {
+                int[] numbers = { 1, 2, 3, 4, 5, 1, 2, 3 };
+                var takeWhileLessThan4 = numbers.TakeWhile(n => n < 4);
+                Console.WriteLine("Задание 74 - TakeWhile (брать элементы пока выполняется условие):");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"TakeWhile(n < 4): [{string.Join(", ", takeWhileLessThan4)}]");
+
+                // Дополнительный пример
+                int[] descendingNumbers = { 5, 4, 3, 2, 1, 6, 7, 8 };
+                var takeWhileDescending = descendingNumbers.TakeWhile(n => n > 2);
+                Console.WriteLine($"Список: [{string.Join(", ", descendingNumbers)}]");
+                Console.WriteLine($"TakeWhile(n > 2): [{string.Join(", ", takeWhileDescending)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 75: SkipWhile - пропускать элементы пока выполняется условие
+            {
+                int[] numbers = { 1, 2, 3, 4, 5, 1, 2, 3 };
+                var skipWhileLessThan4 = numbers.SkipWhile(n => n < 4);
+                Console.WriteLine("Задание 75 - SkipWhile (пропускать элементы пока выполняется условие):");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"SkipWhile(n < 4): [{string.Join(", ", skipWhileLessThan4)}]");
+
+                // Дополнительный пример с строками
+                string[] words = { "apple", "banana", "cherry", "date", "elderberry" };
+                var skipWhileShortWords = words.SkipWhile(w => w.Length < 6);
+                Console.WriteLine($"Слова: [{string.Join(", ", words)}]");
+                Console.WriteLine($"SkipWhile(Length < 6): [{string.Join(", ", skipWhileShortWords)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 76: Последние 3 элемента
+            {
+                int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+                // Исправленная строка - используем альтернативный способ без TakeLast
+                var lastThree = numbers.Skip(Math.Max(0, numbers.Length - 3));
+                Console.WriteLine("Задание 76 - Последние 3 элемента:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"Последние 3 элемента: [{string.Join(", ", lastThree)}]");
+
+                // Дополнительный способ с Reverse
+                var lastThreeReverse = numbers.Reverse().Take(3).Reverse();
+                Console.WriteLine($"Последние 3 элемента (способ с Reverse): [{string.Join(", ", lastThreeReverse)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Дополнительные примеры: Комбинации операций
+            {
+                int[] numbers = { 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+
+                // Комбинация Skip, Take, Where
+                var result1 = numbers.Skip(2).Take(4).Where(n => n % 2 == 0);
+                Console.WriteLine("Дополнительные примеры - Комбинации операций:");
+                Console.WriteLine($"Исходный список: [{string.Join(", ", numbers)}]");
+                Console.WriteLine($"Skip(2).Take(4).Where(четные): [{string.Join(", ", result1)}]");
+
+                // TakeWhile и SkipWhile вместе
+                var result2 = numbers.TakeWhile(n => n < 40).SkipWhile(n => n < 20);
+                Console.WriteLine($"TakeWhile(n < 40).SkipWhile(n < 20): [{string.Join(", ", result2)}]");
+
+                // Пагинация с фильтрацией
+                var filteredPage = numbers.Where(n => n > 20)
+                                        .Skip(1)
+                                        .Take(3);
+                Console.WriteLine($"Where(n > 20).Skip(1).Take(3): [{string.Join(", ", filteredPage)}]");
+            }
+            #endregion
+        }
+    }
+}
