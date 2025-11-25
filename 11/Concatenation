@@ -1,0 +1,159 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 91: Объединение двух массивов
+            {
+                int[] array1 = { 1, 2, 3 };
+                int[] array2 = { 4, 5, 6 };
+
+                var combinedArray = array1.Concat(array2);
+
+                Console.WriteLine("Задание 91 - Объединение двух массивов:");
+                Console.WriteLine($"Массив 1: [{string.Join(", ", array1)}]");
+                Console.WriteLine($"Массив 2: [{string.Join(", ", array2)}]");
+                Console.WriteLine($"Объединенный массив: [{string.Join(", ", combinedArray)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 92: Объединение нескольких списков строк
+            {
+                List<string> list1 = new List<string> { "apple", "banana" };
+                List<string> list2 = new List<string> { "orange", "grape" };
+                List<string> list3 = new List<string> { "kiwi", "mango" };
+
+                var combinedList = list1.Concat(list2).Concat(list3);
+
+                Console.WriteLine("Задание 92 - Объединение нескольких списков строк:");
+                Console.WriteLine($"Список 1: [{string.Join(", ", list1)}]");
+                Console.WriteLine($"Список 2: [{string.Join(", ", list2)}]");
+                Console.WriteLine($"Список 3: [{string.Join(", ", list3)}]");
+                Console.WriteLine($"Объединенный список: [{string.Join(", ", combinedList)}]");
+
+                // Альтернативный способ с массивом списков
+                var allLists = new[] { list1, list2, list3 };
+                var combinedAlt = allLists.SelectMany(list => list);
+                Console.WriteLine($"Альтернативный способ: [{string.Join(", ", combinedAlt)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 93: Объединение коллекций с различными типами элементов
+            {
+                List<int> integers = new List<int> { 1, 2, 3 };
+                List<double> doubles = new List<double> { 4.5, 5.6, 6.7 };
+
+                // Приведение к общему типу - string
+                var combinedAsStrings = integers.Select(i => i.ToString())
+                                              .Concat(doubles.Select(d => d.ToString()));
+
+                // Приведение к общему типу - double
+                var combinedAsDoubles = integers.Select(i => (double)i)
+                                              .Concat(doubles);
+
+                Console.WriteLine("Задание 93 - Объединение коллекций с различными типами:");
+                Console.WriteLine($"Целые числа: [{string.Join(", ", integers)}]");
+                Console.WriteLine($"Дробные числа: [{string.Join(", ", doubles)}]");
+                Console.WriteLine($"Объединение как строки: [{string.Join(", ", combinedAsStrings)}]");
+                Console.WriteLine($"Объединение как дробные: [{string.Join(", ", combinedAsDoubles)}]");
+
+                // Пример с объектами
+                var numbers = new List<int> { 10, 20, 30 };
+                var texts = new List<string> { "hello", "world" };
+
+                var combinedObjects = numbers.Cast<object>()
+                                           .Concat(texts.Cast<object>());
+
+                Console.WriteLine($"Объединение разных типов как object: [{string.Join(", ", combinedObjects)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 94: Объединение отсортированных списков с сохранением сортировки
+            {
+                int[] sorted1 = { 1, 3, 5, 7, 9 };
+                int[] sorted2 = { 2, 4, 6, 8, 10 };
+                int[] sorted3 = { 0, 11, 12 };
+
+                // Простое объединение (не сохраняет общую сортировку)
+                var simpleConcat = sorted1.Concat(sorted2).Concat(sorted3);
+
+                // Объединение с последующей сортировкой
+                var sortedConcat = sorted1.Concat(sorted2)
+                                         .Concat(sorted3)
+                                         .OrderBy(x => x);
+
+                Console.WriteLine("Задание 94 - Объединение отсортированных списков:");
+                Console.WriteLine($"Отсортированный список 1: [{string.Join(", ", sorted1)}]");
+                Console.WriteLine($"Отсортированный список 2: [{string.Join(", ", sorted2)}]");
+                Console.WriteLine($"Отсортированный список 3: [{string.Join(", ", sorted3)}]");
+                Console.WriteLine($"Простое объединение: [{string.Join(", ", simpleConcat)}]");
+                Console.WriteLine($"Объединение с сортировкой: [{string.Join(", ", sortedConcat)}]");
+
+                // Пример со строками
+                string[] names1 = { "Alice", "Carol", "Eve" };
+                string[] names2 = { "Bob", "David", "Frank" };
+
+                var sortedNames = names1.Concat(names2).OrderBy(name => name);
+                Console.WriteLine($"Имена после объединения и сортировки: [{string.Join(", ", sortedNames)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Дополнительные примеры
+            {
+                // Объединение с фильтрацией
+                int[] evens = { 2, 4, 6, 8 };
+                int[] odds = { 1, 3, 5, 7, 9 };
+
+                var numbersGreaterThan5 = evens.Concat(odds).Where(n => n > 5);
+                Console.WriteLine("Дополнительные примеры:");
+                Console.WriteLine($"Четные: [{string.Join(", ", evens)}]");
+                Console.WriteLine($"Нечетные: [{string.Join(", ", odds)}]");
+                Console.WriteLine($"Объединение чисел > 5: [{string.Join(", ", numbersGreaterThan5)}]");
+
+                // Объединение объектов
+                var youngPeople = new List<Person>
+            {
+                new Person { Name = "John", Age = 20 },
+                new Person { Name = "Alice", Age = 22 }
+            };
+
+                var olderPeople = new List<Person>
+            {
+                new Person { Name = "Bob", Age = 35 },
+                new Person { Name = "Carol", Age = 40 }
+            };
+
+                var allPeople = youngPeople.Concat(olderPeople);
+                Console.WriteLine("Все люди:");
+                foreach (var person in allPeople)
+                {
+                    Console.WriteLine($"  {person.Name}, {person.Age} лет");
+                }
+
+                // Объединение с преобразованием
+                var namesAndAges = youngPeople.Select(p => p.Name)
+                                            .Concat(olderPeople.Select(p => $"{p.Name} ({p.Age})"));
+                Console.WriteLine($"Имена и возраст: [{string.Join(", ", namesAndAges)}]");
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+}
