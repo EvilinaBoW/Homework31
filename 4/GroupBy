@@ -1,0 +1,327 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 31: Группировка чисел по четности
+            {
+                int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                var groupedByParity = numbers.GroupBy(n => n % 2 == 0 ? "Четные" : "Нечетные");
+
+                Console.WriteLine("Задание 31 - Группировка чисел по четности:");
+                foreach (var group in groupedByParity)
+                {
+                    Console.WriteLine($"{group.Key}: {string.Join(", ", group)}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 32: Группировка Person по возрасту
+            {
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25 },
+                new Person { Name = "Alice", Age = 30 },
+                new Person { Name = "Bob", Age = 25 },
+                new Person { Name = "Carol", Age = 35 },
+                new Person { Name = "David", Age = 30 }
+            };
+
+                var groupedByAge = people.GroupBy(p => p.Age);
+
+                Console.WriteLine("Задание 32 - Группировка людей по возрасту:");
+                foreach (var group in groupedByAge)
+                {
+                    Console.WriteLine($"Возраст {group.Key}: {string.Join(", ", group.Select(p => p.Name))}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 33: Группировка товаров по категориям с количеством
+            {
+                var products = new List<Product>
+            {
+                new Product { Name = "Mouse", Category = "Electronics" },
+                new Product { Name = "Keyboard", Category = "Electronics" },
+                new Product { Name = "Notebook", Category = "Stationery" },
+                new Product { Name = "Pen", Category = "Stationery" },
+                new Product { Name = "Monitor", Category = "Electronics" },
+                new Product { Name = "Pencil", Category = "Stationery" }
+            };
+
+                var groupedByCategory = products.GroupBy(p => p.Category)
+                                               .Select(g => new { Category = g.Key, Count = g.Count() });
+
+                Console.WriteLine("Задание 33 - Товары по категориям с количеством:");
+                foreach (var group in groupedByCategory)
+                {
+                    Console.WriteLine($"{group.Category}: {group.Count} товаров");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 34: Группировка студентов по факультету со средним баллом
+            {
+                var students = new List<Student>
+            {
+                new Student { Name = "Ivan", Faculty = "Computer Science", GPA = 4.2 },
+                new Student { Name = "Maria", Faculty = "Mathematics", GPA = 4.5 },
+                new Student { Name = "Alex", Faculty = "Computer Science", GPA = 3.8 },
+                new Student { Name = "Olga", Faculty = "Mathematics", GPA = 4.7 },
+                new Student { Name = "Sergey", Faculty = "Physics", GPA = 4.0 }
+            };
+
+                var groupedByFaculty = students.GroupBy(s => s.Faculty)
+                                              .Select(g => new
+                                              {
+                                                  Faculty = g.Key,
+                                                  AverageGPA = g.Average(s => s.GPA),
+                                                  Students = g.Select(s => s.Name)
+                                              });
+
+                Console.WriteLine("Задание 34 - Студенты по факультетам со средним баллом:");
+                foreach (var group in groupedByFaculty)
+                {
+                    Console.WriteLine($"{group.Faculty}: средний балл {group.AverageGPA:F2} - {string.Join(", ", group.Students)}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 35: Группировка сотрудников по отделам с суммой зарплат
+            {
+                var employees = new List<Employee>
+            {
+                new Employee { Name = "Ivan", Department = "IT", Salary = 50000 },
+                new Employee { Name = "Maria", Department = "HR", Salary = 45000 },
+                new Employee { Name = "Alex", Department = "IT", Salary = 60000 },
+                new Employee { Name = "Olga", Department = "Finance", Salary = 55000 },
+                new Employee { Name = "Sergey", Department = "IT", Salary = 48000 },
+                new Employee { Name = "Anna", Department = "HR", Salary = 42000 }
+            };
+
+                var groupedByDepartment = employees.GroupBy(e => e.Department)
+                                                  .Select(g => new
+                                                  {
+                                                      Department = g.Key,
+                                                      TotalSalary = g.Sum(e => e.Salary),
+                                                      EmployeeCount = g.Count()
+                                                  });
+
+                Console.WriteLine("Задание 35 - Сотрудники по отделам с суммой зарплат:");
+                foreach (var group in groupedByDepartment)
+                {
+                    Console.WriteLine($"{group.Department}: {group.EmployeeCount} сотрудников, сумма зарплат {group.TotalSalary} руб.");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 36: Группировка заказов по клиентам с максимальным заказом
+            {
+                var orders = new List<Order>
+            {
+                new Order { Customer = "John", Amount = 1500 },
+                new Order { Customer = "Alice", Amount = 2500 },
+                new Order { Customer = "John", Amount = 3000 },
+                new Order { Customer = "Bob", Amount = 1200 },
+                new Order { Customer = "Alice", Amount = 1800 },
+                new Order { Customer = "John", Amount = 2000 }
+            };
+
+                var groupedByCustomer = orders.GroupBy(o => o.Customer)
+                                             .Select(g => new
+                                             {
+                                                 Customer = g.Key,
+                                                 MaxOrder = g.Max(o => o.Amount),
+                                                 OrderCount = g.Count(),
+                                                 TotalAmount = g.Sum(o => o.Amount)
+                                             });
+
+                Console.WriteLine("Задание 36 - Заказы по клиентам с максимальным заказом:");
+                foreach (var group in groupedByCustomer)
+                {
+                    Console.WriteLine($"{group.Customer}: макс. заказ {group.MaxOrder} руб., всего заказов {group.OrderCount}, общая сумма {group.TotalAmount} руб.");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 37: Группировка строк по первой букве
+            {
+                string[] words = { "Apple", "Banana", "Apricot", "Cherry", "Blueberry", "Avocado", "Blackberry" };
+
+                var groupedByFirstLetter = words.GroupBy(w => w[0])
+                                               .OrderBy(g => g.Key);
+
+                Console.WriteLine("Задание 37 - Строки по первой букве:");
+                foreach (var group in groupedByFirstLetter)
+                {
+                    Console.WriteLine($"{group.Key}: {string.Join(", ", group)}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 38: Группировка событий по датам с количеством
+            {
+                var events = new List<Event>
+            {
+                new Event { Name = "Meeting", Date = new DateTime(2023, 10, 15) },
+                new Event { Name = "Conference", Date = new DateTime(2023, 10, 15) },
+                new Event { Name = "Workshop", Date = new DateTime(2023, 10, 16) },
+                new Event { Name = "Seminar", Date = new DateTime(2023, 10, 17) },
+                new Event { Name = "Training", Date = new DateTime(2023, 10, 17) },
+                new Event { Name = "Review", Date = new DateTime(2023, 10, 17) }
+            };
+
+                var groupedByDate = events.GroupBy(e => e.Date)
+                                         .Select(g => new
+                                         {
+                                             Date = g.Key.ToString("dd.MM.yyyy"),
+                                             EventCount = g.Count(),
+                                             Events = g.Select(e => e.Name)
+                                         })
+                                         .OrderBy(g => g.Date);
+
+                Console.WriteLine("Задание 38 - События по датам с количеством:");
+                foreach (var group in groupedByDate)
+                {
+                    Console.WriteLine($"{group.Date}: {group.EventCount} событий - {string.Join(", ", group.Events)}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 39: Группировка продаж по месяцам с итоговой суммой
+            {
+                var sales = new List<Sale>
+            {
+                new Sale { Product = "Laptop", Amount = 50000, Date = new DateTime(2023, 1, 15) },
+                new Sale { Product = "Mouse", Amount = 2500, Date = new DateTime(2023, 1, 20) },
+                new Sale { Product = "Keyboard", Amount = 3500, Date = new DateTime(2023, 2, 10) },
+                new Sale { Product = "Monitor", Amount = 15000, Date = new DateTime(2023, 2, 25) },
+                new Sale { Product = "Tablet", Amount = 30000, Date = new DateTime(2023, 3, 5) },
+                new Sale { Product = "Phone", Amount = 25000, Date = new DateTime(2023, 3, 18) }
+            };
+
+                var groupedByMonth = sales.GroupBy(s => new { s.Date.Year, s.Date.Month })
+                                         .Select(g => new
+                                         {
+                                             Year = g.Key.Year,
+                                             Month = g.Key.Month,
+                                             TotalAmount = g.Sum(s => s.Amount),
+                                             SalesCount = g.Count()
+                                         })
+                                         .OrderBy(g => g.Year)
+                                         .ThenBy(g => g.Month);
+
+                Console.WriteLine("Задание 39 - Продажи по месяцам с итоговой суммой:");
+                foreach (var group in groupedByMonth)
+                {
+                    Console.WriteLine($"{group.Month}/{group.Year}: {group.SalesCount} продаж, общая сумма {group.TotalAmount} руб.");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 40: Двухуровневая группировка (категория -> подкатегория)
+            {
+                var products = new List<Product>
+            {
+                new Product { Name = "Gaming Mouse", Category = "Electronics", Subcategory = "Computer Accessories" },
+                new Product { Name = "Wireless Keyboard", Category = "Electronics", Subcategory = "Computer Accessories" },
+                new Product { Name = "Smartphone", Category = "Electronics", Subcategory = "Mobile Devices" },
+                new Product { Name = "Tablet", Category = "Electronics", Subcategory = "Mobile Devices" },
+                new Product { Name = "Office Chair", Category = "Furniture", Subcategory = "Chairs" },
+                new Product { Name = "Desk", Category = "Furniture", Subcategory = "Tables" },
+                new Product { Name = "Bookshelf", Category = "Furniture", Subcategory = "Storage" }
+            };
+
+                var twoLevelGrouping = products.GroupBy(p => p.Category)
+                                              .Select(categoryGroup => new
+                                              {
+                                                  Category = categoryGroup.Key,
+                                                  Subcategories = categoryGroup.GroupBy(p => p.Subcategory)
+                                                                              .Select(subGroup => new
+                                                                              {
+                                                                                  Subcategory = subGroup.Key,
+                                                                                  Products = subGroup.Select(p => p.Name),
+                                                                                  Count = subGroup.Count()
+                                                                              })
+                                              });
+
+                Console.WriteLine("Задание 40 - Двухуровневая группировка (категория -> подкатегория):");
+                foreach (var category in twoLevelGrouping)
+                {
+                    Console.WriteLine($"Категория: {category.Category}");
+                    foreach (var subcategory in category.Subcategories)
+                    {
+                        Console.WriteLine($"  Подкатегория: {subcategory.Subcategory} ({subcategory.Count} товаров) - {string.Join(", ", subcategory.Products)}");
+                    }
+                }
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы (добавлены новые)
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+
+    class Student
+    {
+        public string Name { get; set; }
+        public double GPA { get; set; }
+        public string Faculty { get; set; }
+    }
+
+    class Product
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Category { get; set; }
+        public int Popularity { get; set; }
+        public string Subcategory { get; set; }
+    }
+
+    class Employee
+    {
+        public string Name { get; set; }
+        public decimal Salary { get; set; }
+        public int Experience { get; set; }
+        public string Department { get; set; }
+    }
+
+    class Order
+    {
+        public string Customer { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    class Event
+    {
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+    }
+
+    class Sale
+    {
+        public string Product { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+    }
+}
