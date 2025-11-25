@@ -1,0 +1,144 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 51: Сумма всех чисел
+            {
+                int[] numbers = { 1, 2, 3, 4, 5 };
+                int sum = numbers.Sum();
+                Console.WriteLine("Задание 51 - Сумма всех чисел:");
+                Console.WriteLine($"Сумма чисел [1, 2, 3, 4, 5] = {sum}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 52: Среднее значение
+            {
+                double[] numbers = { 10.5, 20.3, 15.7, 8.2, 12.1 };
+                double average = numbers.Average();
+                Console.WriteLine("Задание 52 - Среднее значение:");
+                Console.WriteLine($"Среднее чисел [10.5, 20.3, 15.7, 8.2, 12.1] = {average:F2}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 53: Максимум и минимум
+            {
+                int[] numbers = { 45, 12, 89, 3, 67, 23, 91, 15 };
+                int max = numbers.Max();
+                int min = numbers.Min();
+                Console.WriteLine("Задание 53 - Максимум и минимум:");
+                Console.WriteLine($"Максимум: {max}, Минимум: {min}");
+                Console.WriteLine($"В списке: [{string.Join(", ", numbers)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 54: Количество элементов по условию
+            {
+                int[] numbers = { 15, 25, 35, 45, 55, 65, 75, 85, 95 };
+                int countGreaterThan50 = numbers.Count(n => n > 50);
+                int countEven = numbers.Count(n => n % 2 == 0);
+                Console.WriteLine("Задание 54 - Количество элементов по условию:");
+                Console.WriteLine($"Чисел больше 50: {countGreaterThan50}");
+                Console.WriteLine($"Четных чисел: {countEven}");
+                Console.WriteLine($"В списке: [{string.Join(", ", numbers)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 55: Произведение всех чисел
+            {
+                int[] numbers = { 1, 2, 3, 4, 5 };
+                long product = numbers.Aggregate(1L, (acc, num) => acc * num);
+                Console.WriteLine("Задание 55 - Произведение всех чисел:");
+                Console.WriteLine($"Произведение чисел [1, 2, 3, 4, 5] = {product}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 56: Медиана списка чисел
+            {
+                double[] numbers = { 1.0, 3.0, 2.0, 5.0, 4.0 };
+                double median = numbers.OrderBy(n => n)
+                                     .Skip(numbers.Length / 2)
+                                     .Take(2 - numbers.Length % 2)
+                                     .Average();
+
+                Console.WriteLine("Задание 56 - Медиана списка чисел:");
+                Console.WriteLine($"Медиана чисел [{string.Join(", ", numbers)}] = {median}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 57: Проверка наличия числа больше 100
+            {
+                int[] numbers = { 45, 78, 23, 156, 89, 34, 67 };
+                bool hasNumberGreaterThan100 = numbers.Any(n => n > 100);
+                Console.WriteLine("Задание 57 - Проверка наличия числа больше 100:");
+                Console.WriteLine($"Список содержит число больше 100: {hasNumberGreaterThan100}");
+                Console.WriteLine($"В списке: [{string.Join(", ", numbers)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 58: Факториал с помощью Aggregate
+            {
+                int n = 5;
+                long factorial = Enumerable.Range(1, n).Aggregate(1L, (acc, x) => acc * x);
+                Console.WriteLine("Задание 58 - Факториал с помощью Aggregate:");
+                Console.WriteLine($"{n}! = {factorial}");
+
+                // Альтернативный способ для демонстрации
+                int n2 = 7;
+                long factorial2 = Enumerable.Range(1, n2).Aggregate(1L, (acc, x) => acc * x);
+                Console.WriteLine($"{n2}! = {factorial2}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 59: Сумма квадратов нечетных чисел
+            {
+                int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                int sumOfSquaresOfOdds = numbers
+                    .Where(n => n % 2 != 0)
+                    .Select(n => n * n)
+                    .Sum();
+
+                Console.WriteLine("Задание 59 - Сумма квадратов нечетных чисел:");
+                Console.WriteLine($"Сумма квадратов нечетных чисел из [{string.Join(", ", numbers)}] = {sumOfSquaresOfOdds}");
+                Console.WriteLine($"Проверка: 1² + 3² + 5² + 7² + 9² = 1 + 9 + 25 + 49 + 81 = 165");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 60: Стандартное отклонение
+            {
+                double[] values = { 10, 12, 23, 23, 16, 23, 21, 16 };
+                double standardDeviation = CalculateStandardDeviation(values);
+
+                Console.WriteLine("Задание 60 - Стандартное отклонение:");
+                Console.WriteLine($"Стандартное отклонение для [{string.Join(", ", values)}]");
+                Console.WriteLine($"Среднее: {values.Average():F2}");
+                Console.WriteLine($"Стандартное отклонение: {standardDeviation:F2}");
+            }
+            #endregion
+        }
+
+        // Метод для вычисления стандартного отклонения
+        static double CalculateStandardDeviation(IEnumerable<double> values)
+        {
+            double average = values.Average();
+            double sumOfSquares = values.Sum(x => (x - average) * (x - average));
+            return Math.Sqrt(sumOfSquares / values.Count());
+        }
+    }
+}
