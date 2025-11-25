@@ -1,0 +1,304 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 77: Развернуть список списков в один список
+            {
+                List<List<int>> listOfLists = new List<List<int>>
+            {
+                new List<int> { 1, 2, 3 },
+                new List<int> { 4, 5 },
+                new List<int> { 6, 7, 8, 9 }
+            };
+
+                var flattenedList = listOfLists.SelectMany(innerList => innerList);
+
+                Console.WriteLine("Задание 77 - Развернуть список списков в один список:");
+                Console.WriteLine("Исходный список списков:");
+                foreach (var list in listOfLists)
+                {
+                    Console.WriteLine($"[{string.Join(", ", list)}]");
+                }
+                Console.WriteLine($"Развернутый список: [{string.Join(", ", flattenedList)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 78: Декартово произведение двух коллекций
+            {
+                string[] colors = { "Red", "Blue", "Green" };
+                string[] sizes = { "Small", "Medium", "Large" };
+
+                var cartesianProduct = colors.SelectMany(
+                    color => sizes,
+                    (color, size) => $"{color} {size}"
+                );
+
+                Console.WriteLine("Задание 78 - Декартово произведение двух коллекций:");
+                Console.WriteLine($"Цвета: [{string.Join(", ", colors)}]");
+                Console.WriteLine($"Размеры: [{string.Join(", ", sizes)}]");
+                Console.WriteLine("Декартово произведение:");
+                foreach (var combination in cartesianProduct)
+                {
+                    Console.WriteLine($"  {combination}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 79: Преобразование иерархической структуры в плоский список
+            {
+                var departments = new List<Department>
+            {
+                new Department
+                {
+                    Name = "IT",
+                    Employees = new List<Employee>
+                    {
+                        new Employee { Name = "John", Position = "Developer" },
+                        new Employee { Name = "Alice", Position = "Manager" }
+                    }
+                },
+                new Department
+                {
+                    Name = "HR",
+                    Employees = new List<Employee>
+                    {
+                        new Employee { Name = "Bob", Position = "Recruiter" },
+                        new Employee { Name = "Carol", Position = "HR Manager" }
+                    }
+                }
+            };
+
+                var allEmployees = departments.SelectMany(
+                    dept => dept.Employees,
+                    (dept, employee) => new { Department = dept.Name, employee.Name, employee.Position }
+                );
+
+                Console.WriteLine("Задание 79 - Иерархическая структура в плоский список:");
+                Console.WriteLine("Все сотрудники по отделам:");
+                foreach (var emp in allEmployees)
+                {
+                    Console.WriteLine($"  {emp.Department}: {emp.Name} - {emp.Position}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 80: Получение всех элементов из вложенных коллекций
+            {
+                var students = new List<Student>
+            {
+                new Student
+                {
+                    Name = "Ivan",
+                    Courses = new List<string> { "Math", "Physics", "Chemistry" }
+                },
+                new Student
+                {
+                    Name = "Maria",
+                    Courses = new List<string> { "Biology", "Math" }
+                },
+                new Student
+                {
+                    Name = "Alex",
+                    Courses = new List<string> { "Physics", "Computer Science" }
+                }
+            };
+
+                var allCourses = students.SelectMany(student => student.Courses).Distinct();
+
+                Console.WriteLine("Задание 80 - Все элементы из вложенных коллекций:");
+                Console.WriteLine("Все уникальные курсы студентов:");
+                foreach (var course in allCourses)
+                {
+                    Console.WriteLine($"  {course}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 81: Все комбинации элементов из нескольких коллекций
+            {
+                string[] adjectives = { "Big", "Small" };
+                string[] colors = { "Red", "Blue" };
+                string[] objects = { "House", "Car" };
+
+                var allCombinations = adjectives
+                    .SelectMany(adj => colors, (adj, color) => new { adj, color })
+                    .SelectMany(x => objects, (x, obj) => $"{x.adj} {x.color} {obj}");
+
+                Console.WriteLine("Задание 81 - Все комбинации элементов из нескольких коллекций:");
+                Console.WriteLine($"Прилагательные: [{string.Join(", ", adjectives)}]");
+                Console.WriteLine($"Цвета: [{string.Join(", ", colors)}]");
+                Console.WriteLine($"Объекты: [{string.Join(", ", objects)}]");
+                Console.WriteLine("Все комбинации:");
+                foreach (var combination in allCombinations)
+                {
+                    Console.WriteLine($"  {combination}");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 82: Разделение строк на символы
+            {
+                string[] words = { "Hello", "World", "LINQ" };
+
+                var allCharacters = words.SelectMany(word => word.ToCharArray());
+
+                Console.WriteLine("Задание 82 - Разделение строк на символы:");
+                Console.WriteLine($"Слова: [{string.Join(", ", words)}]");
+                Console.WriteLine($"Все символы: [{string.Join(", ", allCharacters)}]");
+
+                // С уникальными символами
+                var uniqueCharacters = words.SelectMany(word => word.ToCharArray()).Distinct();
+                Console.WriteLine($"Уникальные символы: [{string.Join(", ", uniqueCharacters)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 83: SelectMany с индексом для сохранения позиции
+            {
+                string[] sentences =
+                {
+                "Hello world",
+                "LINQ is great",
+                "C# programming"
+            };
+
+                var wordsWithPosition = sentences.SelectMany(
+                    (sentence, sentenceIndex) =>
+                        sentence.Split(' ').Select((word, wordIndex) =>
+                            new
+                            {
+                                SentenceIndex = sentenceIndex,
+                                WordIndex = wordIndex,
+                                Word = word,
+                                FullPosition = $"{sentenceIndex}.{wordIndex}"
+                            }
+                        )
+                );
+
+                Console.WriteLine("Задание 83 - SelectMany с индексом:");
+                Console.WriteLine("Предложения:");
+                for (int i = 0; i < sentences.Length; i++)
+                {
+                    Console.WriteLine($"  {i}: {sentences[i]}");
+                }
+                Console.WriteLine("Все слова с позициями:");
+                foreach (var item in wordsWithPosition)
+                {
+                    Console.WriteLine($"  Позиция {item.FullPosition}: '{item.Word}' (предложение {item.SentenceIndex}, слово {item.WordIndex})");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 84: Объединение нескольких коллекций в одну
+            {
+                List<int> list1 = new List<int> { 1, 2, 3 };
+                List<int> list2 = new List<int> { 4, 5, 6 };
+                List<int> list3 = new List<int> { 7, 8, 9 };
+
+                var combinedList = new[] { list1, list2, list3 }.SelectMany(list => list);
+
+                Console.WriteLine("Задание 84 - Объединение нескольких коллекций в одну:");
+                Console.WriteLine($"Список 1: [{string.Join(", ", list1)}]");
+                Console.WriteLine($"Список 2: [{string.Join(", ", list2)}]");
+                Console.WriteLine($"Список 3: [{string.Join(", ", list3)}]");
+                Console.WriteLine($"Объединенный список: [{string.Join(", ", combinedList)}]");
+
+                // Альтернативный способ с массивом массивов
+                int[][] arrays = { new[] { 10, 11 }, new[] { 12, 13, 14 }, new[] { 15 } };
+                var combinedArrays = arrays.SelectMany(arr => arr);
+                Console.WriteLine($"Объединенные массивы: [{string.Join(", ", combinedArrays)}]");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Дополнительный пример: Сложная иерархия
+            {
+                var company = new List<Company>
+            {
+                new Company
+                {
+                    Name = "Tech Corp",
+                    Departments = new List<Department>
+                    {
+                        new Department
+                        {
+                            Name = "Development",
+                            Employees = new List<Employee>
+                            {
+                                new Employee { Name = "Mike", Position = "Senior Developer" },
+                                new Employee { Name = "Sarah", Position = "Junior Developer" }
+                            }
+                        },
+                        new Department
+                        {
+                            Name = "Testing",
+                            Employees = new List<Employee>
+                            {
+                                new Employee { Name = "Tom", Position = "QA Engineer" }
+                            }
+                        }
+                    }
+                }
+            };
+
+                var allCompanyEmployees = company
+                    .SelectMany(comp => comp.Departments)
+                    .SelectMany(dept => dept.Employees,
+                        (dept, employee) => new
+                        {
+                            Company = company[0].Name,
+                            Department = dept.Name,
+                            employee.Name,
+                            employee.Position
+                        });
+
+                Console.WriteLine("Дополнительный пример - Сложная иерархия:");
+                Console.WriteLine("Все сотрудники компании:");
+                foreach (var emp in allCompanyEmployees)
+                {
+                    Console.WriteLine($"  {emp.Company} -> {emp.Department}: {emp.Name} - {emp.Position}");
+                }
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы
+    class Department
+    {
+        public string Name { get; set; }
+        public List<Employee> Employees { get; set; }
+    }
+
+    class Employee
+    {
+        public string Name { get; set; }
+        public string Position { get; set; }
+    }
+
+    class Student
+    {
+        public string Name { get; set; }
+        public List<string> Courses { get; set; }
+    }
+
+    class Company
+    {
+        public string Name { get; set; }
+        public List<Department> Departments { get; set; }
+    }
+}
