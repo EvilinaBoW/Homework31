@@ -1,0 +1,195 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp16
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Задание 85: Проверка наличия числа больше 10
+            {
+                int[] numbers1 = { 1, 5, 8, 12, 3 };
+                int[] numbers2 = { 1, 2, 3, 4, 5 };
+
+                bool hasGreaterThan10_1 = numbers1.Any(n => n > 10);
+                bool hasGreaterThan10_2 = numbers2.Any(n => n > 10);
+
+                Console.WriteLine("Задание 85 - Проверка наличия числа больше 10:");
+                Console.WriteLine($"Список 1 [{string.Join(", ", numbers1)}]: содержит число > 10 - {hasGreaterThan10_1}");
+                Console.WriteLine($"Список 2 [{string.Join(", ", numbers2)}]: содержит число > 10 - {hasGreaterThan10_2}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 86: Проверка, что все элементы больше нуля
+            {
+                int[] numbers1 = { 1, 5, 8, 12, 3 };
+                int[] numbers2 = { 1, 2, -3, 4, 5 };
+                int[] numbers3 = { 10, 20, 30, 40 };
+
+                bool allPositive1 = numbers1.All(n => n > 0);
+                bool allPositive2 = numbers2.All(n => n > 0);
+                bool allPositive3 = numbers3.All(n => n > 0);
+
+                Console.WriteLine("Задание 86 - Проверка, что все элементы больше нуля:");
+                Console.WriteLine($"Список 1 [{string.Join(", ", numbers1)}]: все > 0 - {allPositive1}");
+                Console.WriteLine($"Список 2 [{string.Join(", ", numbers2)}]: все > 0 - {allPositive2}");
+                Console.WriteLine($"Список 3 [{string.Join(", ", numbers3)}]: все > 0 - {allPositive3}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 87: Проверка наличия конкретного значения
+            {
+                string[] fruits = { "apple", "banana", "orange", "grape" };
+                string[] emptyArray = { };
+
+                bool containsBanana = fruits.Contains("banana");
+                bool containsMango = fruits.Contains("mango");
+                bool containsEmpty = emptyArray.Contains("apple");
+
+                Console.WriteLine("Задание 87 - Проверка наличия конкретного значения:");
+                Console.WriteLine($"Фрукты [{string.Join(", ", fruits)}]:");
+                Console.WriteLine($"  Содержит 'banana' - {containsBanana}");
+                Console.WriteLine($"  Содержит 'mango' - {containsMango}");
+                Console.WriteLine($"Пустой массив содержит 'apple' - {containsEmpty}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 88: Проверка наличия объекта с определенными свойствами
+            {
+                var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 25, City = "New York" },
+                new Person { Name = "Alice", Age = 30, City = "London" },
+                new Person { Name = "Bob", Age = 35, City = "Paris" },
+                new Person { Name = "Carol", Age = 28, City = "Tokyo" }
+            };
+
+                bool hasPersonFromLondon = people.Any(p => p.City == "London");
+                bool hasPersonOver40 = people.Any(p => p.Age > 40);
+                bool hasJohnFromNY = people.Any(p => p.Name == "John" && p.City == "New York");
+                bool allAdults = people.All(p => p.Age >= 18);
+
+                Console.WriteLine("Задание 88 - Проверка наличия объекта с определенными свойствами:");
+                Console.WriteLine("Список людей:");
+                foreach (var person in people)
+                {
+                    Console.WriteLine($"  {person.Name}, {person.Age} лет, {person.City}");
+                }
+                Console.WriteLine($"Есть человек из Лондона - {hasPersonFromLondon}");
+                Console.WriteLine($"Есть человек старше 40 лет - {hasPersonOver40}");
+                Console.WriteLine($"Есть John из Нью-Йорка - {hasJohnFromNY}");
+                Console.WriteLine($"Все совершеннолетние - {allAdults}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 89: Проверка пустоты списка
+            {
+                List<int> emptyList = new List<int>();
+                List<int> nonEmptyList = new List<int> { 1, 2, 3 };
+                int[] emptyArray = { };
+                int[] nonEmptyArray = { 10, 20 };
+
+                bool isEmpty1 = !emptyList.Any();
+                bool isEmpty2 = !nonEmptyList.Any();
+                bool isEmpty3 = !emptyArray.Any();
+                bool isEmpty4 = !nonEmptyArray.Any();
+
+                // Альтернативный способ
+                bool isEmpty1_alt = emptyList.Count == 0;
+                bool isEmpty2_alt = nonEmptyList.Count == 0;
+
+                Console.WriteLine("Задание 89 - Проверка пустоты списка:");
+                Console.WriteLine($"Пустой список: IsEmpty - {isEmpty1}, Count == 0 - {isEmpty1_alt}");
+                Console.WriteLine($"Непустой список: IsEmpty - {isEmpty2}, Count == 0 - {isEmpty2_alt}");
+                Console.WriteLine($"Пустой массив: IsEmpty - {isEmpty3}");
+                Console.WriteLine($"Непустой массив: IsEmpty - {isEmpty4}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Задание 90: Проверка наличия ровно N элементов
+            {
+                int[] numbers1 = { 1, 2, 3, 4, 5 };
+                int[] numbers2 = { 10, 20 };
+                int[] numbers3 = { 100 };
+                int[] numbers4 = { };
+
+                bool hasExactly5 = numbers1.Count() == 5;
+                bool hasExactly2 = numbers2.Count() == 2;
+                bool hasExactly1 = numbers3.Count() == 1;
+                bool hasExactly0 = numbers4.Count() == 0;
+
+                // Проверка с условием
+                bool hasExactly2Even = numbers1.Count(n => n % 2 == 0) == 2;
+                bool hasExactly1GreaterThan10 = numbers1.Count(n => n > 10) == 1;
+
+                Console.WriteLine("Задание 90 - Проверка наличия ровно N элементов:");
+                Console.WriteLine($"Список 1 [{string.Join(", ", numbers1)}]:");
+                Console.WriteLine($"  Ровно 5 элементов - {hasExactly5}");
+                Console.WriteLine($"  Ровно 2 четных элемента - {hasExactly2Even}");
+                Console.WriteLine($"  Ровно 1 элемент > 10 - {hasExactly1GreaterThan10}");
+
+                Console.WriteLine($"Список 2 [{string.Join(", ", numbers2)}]: ровно 2 элемента - {hasExactly2}");
+                Console.WriteLine($"Список 3 [{string.Join(", ", numbers3)}]: ровно 1 элемент - {hasExactly1}");
+                Console.WriteLine($"Список 4: ровно 0 элементов - {hasExactly0}");
+                Console.WriteLine();
+            }
+            #endregion
+
+            #region Дополнительные примеры: Комбинации кванторов
+            {
+                var products = new List<Product>
+            {
+                new Product { Name = "Laptop", Price = 1000, InStock = true },
+                new Product { Name = "Mouse", Price = 25, InStock = true },
+                new Product { Name = "Keyboard", Price = 75, InStock = false },
+                new Product { Name = "Monitor", Price = 300, InStock = true }
+            };
+
+                bool allInStock = products.All(p => p.InStock);
+                bool anyExpensive = products.Any(p => p.Price > 500);
+                bool allHavePrice = products.All(p => p.Price > 0);
+                bool hasSpecificProduct = products.Any(p => p.Name.Contains("Laptop") && p.Price < 1500);
+
+                Console.WriteLine("Дополнительные примеры - Комбинации кванторов:");
+                Console.WriteLine("Список продуктов:");
+                foreach (var product in products)
+                {
+                    Console.WriteLine($"  {product.Name} - ${product.Price} - В наличии: {product.InStock}");
+                }
+                Console.WriteLine($"Все продукты в наличии - {allInStock}");
+                Console.WriteLine($"Есть дорогие продукты (>$500) - {anyExpensive}");
+                Console.WriteLine($"У всех продуктов указана цена - {allHavePrice}");
+                Console.WriteLine($"Есть ноутбук дешевле $1500 - {hasSpecificProduct}");
+
+                // Комбинированная проверка
+                bool hasAffordableInStock = products.Any(p => p.Price < 100 && p.InStock);
+                Console.WriteLine($"Есть доступные продукты в наличии (<$100) - {hasAffordableInStock}");
+            }
+            #endregion
+        }
+    }
+
+    // Вспомогательные классы
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public string City { get; set; }
+    }
+
+    class Product
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public bool InStock { get; set; }
+    }
+}
